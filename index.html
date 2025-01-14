@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Pad Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            display: block;
+            margin: 0 auto;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #output {
+            word-break: break-word;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Signature Pad</h1>
+    <canvas id="signatureCanvas" width="300" height="200"></canvas>
+    <div>
+        <button id="clearButton">Clear</button>
+        <button id="saveButton">Save</button>
+    </div>
+    <p id="output"></p>
+
+    <script>
+        // Get the canvas and buttons
+        const canvas = document.getElementById('signatureCanvas');
+        const clearButton = document.getElementById('clearButton');
+        const saveButton = document.getElementById('saveButton');
+        const output = document.getElementById('output');
+
+        // Initialize Signature Pad
+        const signaturePad = new SignaturePad(canvas);
+
+        // Clear button functionality
+        clearButton.addEventListener('click', () => {
+            signaturePad.clear();
+            output.textContent = '';
+        });
+
+        // Save button functionality
+        saveButton.addEventListener('click', () => {
+            if (signaturePad.isEmpty()) {
+                alert('Please provide a signature first.');
+            } else {
+                const dataURL = signaturePad.toDataURL();
+                output.textContent = `Base64 Data: ${dataURL}`;
+
+                // Example: Sending to server (uncomment to use)
+                // fetch('/api/signature', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify({ signature: dataURL })
+                // }).then(response => response.json())
+                //   .then(data => console.log(data));
+            }
+        });
+    </script>
+</body>
+</html>
